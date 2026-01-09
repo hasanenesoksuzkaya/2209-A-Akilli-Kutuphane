@@ -84,7 +84,7 @@ def qr_kodlari_olustur():
     print(f"Toplam {len(masalar)} adet QR kod oluşturuldu!")
     print(f"QR kodlar '{qr_klasoru}' klasörüne kaydedildi.")
     print("=" * 50)
-
+ 
 
 def tek_qr_olustur(masa_no):
     """
