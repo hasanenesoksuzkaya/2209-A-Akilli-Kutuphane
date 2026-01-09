@@ -1,0 +1,98 @@
+@{
+    ViewData["Title"] = "Ana Sayfa";
+}
+
+<!-- Hocam, ana sayfada kütüphanenin anlık durumunu gösteriyorum -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="jumbotron bg-white p-5 rounded shadow-sm">
+            <h1 class="display-5">
+                <i class="fas fa-book-reader text-primary"></i> 
+                Kayseri Üniversitesi Kütüphanesi
+            </h1>
+            <p class="lead">
+                Akıllı Masa Takip Sistemi ile boş masa bulmak artık çok kolay!
+            </p>
+            <hr>
+            <p>
+                QR kodunu okutarak masanı rezerve et, çıkarken çıkış yap. 
+                Bu kadar basit!
+            </p>
+        </div>
+    </div>
+</div>
+
+<!-- Hocam, burada doluluk istatistiklerini kartlar halinde gösteriyorum -->
+<div class="row mb-4">
+    <!-- Toplam Masa Kartı -->
+    <div class="col-md-3 col-6 mb-3">
+        <div class="card text-center h-100">
+            <div class="card-body">
+                <i class="fas fa-chair fa-3x text-primary mb-3"></i>
+                <h2 class="card-title">@ViewBag.ToplamMasa</h2>
+                <p class="card-text text-muted">Toplam Masa</p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Boş Masa Kartı -->
+    <div class="col-md-3 col-6 mb-3">
+        <div class="card text-center h-100 card-bos">
+            <div class="card-body">
+                <i class="fas fa-check-circle fa-3x text-success mb-3"></i>
+                <h2 class="card-title text-success">@ViewBag.BosMasa</h2>
+                <p class="card-text text-muted">Boş Masa</p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Dolu Masa Kartı -->
+    <div class="col-md-3 col-6 mb-3">
+        <div class="card text-center h-100 card-dolu">
+            <div class="card-body">
+                <i class="fas fa-user-clock fa-3x text-danger mb-3"></i>
+                <h2 class="card-title text-danger">@ViewBag.DoluMasa</h2>
+                <p class="card-text text-muted">Dolu Masa</p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Doluluk Oranı Kartı -->
+    <div class="col-md-3 col-6 mb-3">
+        <div class="card text-center h-100">
+            <div class="card-body">
+                <i class="fas fa-chart-pie fa-3x text-warning mb-3"></i>
+                <h2 class="card-title">%@ViewBag.DolulukOrani</h2>
+                <p class="card-text text-muted">Doluluk Oranı</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Hocam, hızlı işlem butonları -->
+<div class="row">
+    <div class="col-md-6 mb-3">
+        <div class="card">
+            <div class="card-body text-center">
+                <i class="fas fa-qrcode fa-4x text-primary mb-3"></i>
+                <h5 class="card-title">QR Kod Tara</h5>
+                <p class="card-text">Masadaki QR kodu okutarak rezervasyon yap</p>
+                <a href="/Masa/QRTara" class="btn btn-primary">
+                    <i class="fas fa-camera"></i> QR Tara
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6 mb-3">
+        <div class="card">
+            <div class="card-body text-center">
+                <i class="fas fa-list fa-4x text-info mb-3"></i>
+                <h5 class="card-title">Tüm Masaları Gör</h5>
+                <p class="card-text">Kütüphanedeki tüm masaların durumunu incele</p>
+                <a href="/Masa" class="btn btn-info text-white">
+                    <i class="fas fa-eye"></i> Masaları Gör
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

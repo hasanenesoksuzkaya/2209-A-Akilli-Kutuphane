@@ -1,0 +1,85 @@
+@model Masa
+@{
+    ViewData["Title"] = "Masa Detay - " + Model.MasaNo;
+}
+
+<!-- Hocam, tek bir masanın detay sayfası -->
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card shadow">
+            <div class="card-header @(Model.DoluMu ? "bg-danger" : "bg-success") text-white">
+                <h4 class="mb-0">
+                    <i class="fas fa-chair"></i> Masa @Model.MasaNo Detayı
+                </h4>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <table class="table">
+                            <tr>
+                                <th><i class="fas fa-hashtag"></i> Masa No:</th>
+                                <td>@Model.MasaNo</td>
+                            </tr>
+                            <tr>
+                                <th><i class="fas fa-map-marker-alt"></i> Konum:</th>
+                                <td>@Model.Konum</td>
+                            </tr>
+                            <tr>
+                                <th><i class="fas fa-users"></i> Kapasite:</th>
+                                <td>@Model.Kapasite Kişilik</td>
+                            </tr>
+                            <tr>
+                                <th><i class="fas fa-info-circle"></i> Durum:</th>
+                                <td>
+                                    @if (Model.DoluMu)
+                                    {
+                                        <span class="badge bg-danger">DOLU</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-success">BOŞ</span>
+                                    }
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="col-md-6 text-center">
+                        @if (Model.DoluMu)
+                        {
+                            <i class="fas fa-user-clock fa-5x text-danger mb-3"></i>
+                        }
+                        else
+                        {
+                            <i class="fas fa-check-circle fa-5x text-success mb-3"></i>
+                        }
+                    </div>
+                </div>
+
+                @if (Model.DoluMu && ViewBag.AktifRezervasyon != null)
+                {
+                    var rez = ViewBag.AktifRezervasyon as Rezervasyon;
+                    <hr>
+                    <h5><i class="fas fa-clock"></i> Aktif Rezervasyon Bilgisi</h5>
+                    <div class="alert alert-warning">
+                        <p class="mb-1"><strong>Başlangıç:</strong> @rez.BaslangicZamani.ToString("HH:mm")</p>
+                        <p class="mb-1"><strong>Tahmini Bitiş:</strong> @rez.TahminibitisZamani.ToString("HH:mm")</p>
+                        <p class="mb-0"><strong>Planlanan Süre:</strong> @rez.PlanlananSure saat</p>
+                    </div>
+                }
+
+                <hr>
+                <div class="d-grid gap-2">
+                    @if (!Model.DoluMu)
+                    {
+                        <a href="/Masa/Rezervasyon?masaId=@Model.Id" class="btn btn-success">
+                            <i class="fas fa-plus"></i> Bu Masayı Rezerve Et
+                        </a>
+                    }
+                    <a href="/Masa" class="btn btn-outline-secondary">
+                        <i class="fas fa-arrow-left"></i> Tüm Masalara Dön
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

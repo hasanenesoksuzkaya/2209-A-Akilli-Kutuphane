@@ -1,0 +1,117 @@
+@model List<Masa>
+@{
+    ViewData["Title"] = "Masalar";
+}
+
+<!-- Hocam, tüm masaları gösteren ana sayfa -->
+<div class="row mb-4">
+    <div class="col-12">
+        <h2><i class="fas fa-chair"></i> Kütüphane Masaları</h2>
+        <p class="text-muted">Aşağıdan boş olan masaları görebilir ve QR kodunu okutarak rezervasyon yapabilirsiniz.</p>
+    </div>
+</div>
+
+<!-- Hocam, kata göre filtreleme butonları -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="btn-group" role="group">
+            <a href="/Masa" class="btn btn-outline-primary @(ViewBag.SeciliKonum == null ? "active" : "")">
+                <i class="fas fa-list"></i> Tümü
+            </a>
+            <a href="/Masa/KataGore?konum=Zemin" class="btn btn-outline-primary @(ViewBag.SeciliKonum == "Zemin" ? "active" : "")">
+                Zemin Kat
+            </a>
+            <a href="/Masa/KataGore?konum=1. Kat" class="btn btn-outline-primary @(ViewBag.SeciliKonum == "1. Kat" ? "active" : "")">
+                1. Kat
+            </a>
+            <a href="/Masa/KataGore?konum=2. Kat" class="btn btn-outline-primary @(ViewBag.SeciliKonum == "2. Kat" ? "active" : "")">
+                2. Kat
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- Hocam, istatistik kartları -->
+<div class="row mb-4">
+    <div class="col-md-4 col-6 mb-2">
+        <div class="card bg-light">
+            <div class="card-body text-center py-2">
+                <h4 class="mb-0">@Model.Count</h4>
+                <small class="text-muted">Toplam Masa</small>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4 col-6 mb-2">
+        <div class="card bg-success text-white">
+            <div class="card-body text-center py-2">
+                <h4 class="mb-0">@Model.Count(m => !m.DoluMu)</h4>
+                <small>Boş Masa</small>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4 col-12 mb-2">
+        <div class="card bg-danger text-white">
+            <div class="card-body text-center py-2">
+                <h4 class="mb-0">@Model.Count(m => m.DoluMu)</h4>
+                <small>Dolu Masa</small>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Hocam, masa kartları - grid sistemle responsive yapıyorum -->
+<div class="row">
+    @foreach (var masa in Model)
+    {
+        <div class="col-lg-3 col-md-4 col-6 mb-4">
+            <div class="card h-100 @(masa.DoluMu ? "border-danger" : "border-success")">
+                <div class="card-header @(masa.DoluMu ? "bg-danger" : "bg-success") text-white text-center">
+                    <h5 class="mb-0">
+                        <i class="fas fa-chair"></i> @masa.MasaNo
+                    </h5>
+                </div>
+                <div class="card-body text-center">
+                    <!-- Durum ikonu -->
+                    @if (masa.DoluMu)
+                    {
+                        <i class="fas fa-user-clock fa-3x text-danger mb-2"></i>
+                        <p class="mb-1"><span class="badge bg-danger">DOLU</span></p>
+                    }
+                    else
+                    {
+                        <i class="fas fa-check-circle fa-3x text-success mb-2"></i>
+                        <p class="mb-1"><span class="badge bg-success">BOŞ</span></p>
+                    }
+                    
+                    <p class="text-muted small mb-1">
+                        <i class="fas fa-map-marker-alt"></i> @masa.Konum
+                    </p>
+                    <p class="text-muted small mb-2">
+                        <i class="fas fa-users"></i> @masa.Kapasite Kişilik
+                    </p>
+                </div>
+                <div class="card-footer bg-transparent">
+                    @if (masa.DoluMu)
+                    {
+                        <a href="/Masa/Detay/@masa.Id" class="btn btn-outline-secondary btn-sm w-100">
+                            <i class="fas fa-eye"></i> Detay
+                        </a>
+                    }
+                    else
+                    {
+                        <a href="/Masa/Rezervasyon?masaId=@masa.Id" class="btn btn-success btn-sm w-100">
+                            <i class="fas fa-plus"></i> Rezerve Et
+                        </a>
+                    }
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@if (Model.Count == 0)
+{
+    <div class="alert alert-info text-center">
+        <i class="fas fa-info-circle"></i> Bu kriterlere uygun masa bulunamadı.
+    </div>
+}

@@ -1,0 +1,166 @@
+@model Rezervasyon
+@{
+    ViewData["Title"] = "Rezervasyon Detay";
+    var kalanDakika = (Model.TahminibitisZamani - DateTime.Now).TotalMinutes;
+    var kalanSaat = (int)(kalanDakika / 60);
+    var kalanDk = (int)(kalanDakika % 60);
+}
+
+<!-- Hocam, rezervasyon yapıldıktan sonra öğrenci bu sayfayı görecek -->
+<!-- Kalan süre ve çıkış butonu burada -->
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        
+        @if (TempData["Basari"] != null)
+        {
+            <div class="alert alert-success alert-dismissible fade show">
+                <i class="fas fa-check-circle"></i> @TempData["Basari"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        }
+
+        <div class="card shadow">
+            <div class="card-header bg-primary text-white text-center">
+                <h4 class="mb-0">
+                    <i class="fas fa-ticket-alt"></i> Rezervasyon Bilgileriniz
+                </h4>
+            </div>
+            <div class="card-body">
+                
+                <!-- Hocam, rezervasyon özet kartı -->
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="card bg-light mb-3">
+                            <div class="card-body">
+                                <h5 class="card-title">
+                                    <i class="fas fa-chair text-primary"></i> Masa Bilgisi
+                                </h5>
+                                <p class="mb-1"><strong>Masa No:</strong> @Model.Masa?.MasaNo</p>
+                                <p class="mb-1"><strong>Konum:</strong> @Model.Masa?.Konum</p>
+                                <p class="mb-0"><strong>Kapasite:</strong> @Model.Masa?.Kapasite Kişilik</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card bg-light mb-3">
+                            <div class="card-body">
+                                <h5 class="card-title">
+                                    <i class="fas fa-user text-primary"></i> Öğrenci Bilgisi
+                                </h5>
+                                <p class="mb-1"><strong>Öğrenci No:</strong> @Model.Ogrenci?.OgrenciNo</p>
+                                <p class="mb-0"><strong>Ad Soyad:</strong> @Model.Ogrenci?.AdSoyad</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Hocam, zaman bilgileri -->
+                <div class="card border-info mb-3">
+                    <div class="card-body">
+                        <div class="row text-center">
+                            <div class="col-4">
+                                <i class="fas fa-play-circle fa-2x text-success mb-2"></i>
+                                <p class="mb-0 small text-muted">Başlangıç</p>
+                                <strong>@Model.BaslangicZamani.ToString("HH:mm")</strong>
+                            </div>
+                            <div class="col-4">
+                                <i class="fas fa-hourglass-half fa-2x text-warning mb-2"></i>
+                                <p class="mb-0 small text-muted">Süre</p>
+                                <strong>@Model.PlanlananSure Saat</strong>
+                            </div>
+                            <div class="col-4">
+                                <i class="fas fa-stop-circle fa-2x text-danger mb-2"></i>
+                                <p class="mb-0 small text-muted">Bitiş</p>
+                                <strong>@Model.TahminibitisZamani.ToString("HH:mm")</strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Hocam, kalan süre büyük gösterim -->
+                @if (Model.Durum == "Aktif")
+                {
+                    <div class="text-center py-4">
+                        @if (kalanDakika > 0)
+                        {
+                            <h2 class="text-primary">
+                                <i class="fas fa-clock"></i> Kalan Süre
+                            </h2>
+                            <div class="display-4 text-warning" id="kalanSure">
+                                @kalanSaat saat @kalanDk dakika
+                            </div>
+                        }
+                        else
+                        {
+                            <h2 class="text-danger">
+                                <i class="fas fa-exclamation-triangle"></i> Süreniz Doldu!
+                            </h2>
+                            <p class="text-muted">Lütfen çıkış yapın veya sürenizi uzatın.</p>
+                        }
+                    </div>
+
+                    <hr>
+
+                    <!-- Hocam, çıkış butonu -->
+                    <form method="post" asp-action="CikisYap">
+                        <input type="hidden" name="rezervasyonId" value="@Model.Id" />
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-danger btn-lg" 
+                                    onclick="return confirm('Çıkış yapmak istediğinize emin misiniz?')">
+                                <i class="fas fa-sign-out-alt"></i> Çıkış Yap
+                            </button>
+                            <a href="/Masa" class="btn btn-outline-secondary">
+                                <i class="fas fa-list"></i> Tüm Masaları Gör
+                            </a>
+                        </div>
+                    </form>
+                }
+                else
+                {
+                    <!-- Hocam, rezervasyon tamamlanmışsa -->
+                    <div class="alert alert-secondary text-center">
+                        <h5><i class="fas fa-check-circle"></i> Bu rezervasyon tamamlanmış</h5>
+                        <p class="mb-0">Çıkış Zamanı: @Model.GercekCikisZamani?.ToString("dd.MM.yyyy HH:mm")</p>
+                    </div>
+                    <div class="d-grid">
+                        <a href="/Masa" class="btn btn-primary">
+                            <i class="fas fa-arrow-left"></i> Ana Sayfaya Dön
+                        </a>
+                    </div>
+                }
+
+            </div>
+            <div class="card-footer text-muted text-center">
+                <small>Rezervasyon No: #@Model.Id | Tarih: @Model.BaslangicZamani.ToString("dd.MM.yyyy")</small>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <!-- Hocam, kalan süreyi otomatik güncelleyen JavaScript -->
+    @if (Model.Durum == "Aktif")
+    {
+        <script>
+            // Hocam, bu script sayfa açıkken kalan süreyi her dakika günceller
+            var bitisZamani = new Date("@Model.TahminibitisZamani.ToString("yyyy-MM-ddTHH:mm:ss")");
+            
+            function sureGuncelle() {
+                var simdi = new Date();
+                var fark = bitisZamani - simdi;
+                
+                if (fark > 0) {
+                    var saat = Math.floor(fark / (1000 * 60 * 60));
+                    var dakika = Math.floor((fark % (1000 * 60 * 60)) / (1000 * 60));
+                    document.getElementById("kalanSure").innerHTML = saat + " saat " + dakika + " dakika";
+                } else {
+                    document.getElementById("kalanSure").innerHTML = "Süre Doldu!";
+                    document.getElementById("kalanSure").className = "display-4 text-danger";
+                }
+            }
+            
+            // Her 30 saniyede bir güncelle
+            setInterval(sureGuncelle, 30000);
+        </script>
+    }
+}

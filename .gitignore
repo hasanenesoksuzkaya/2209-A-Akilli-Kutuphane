@@ -1,0 +1,39 @@
+# Visual Studio
+.vs/
+bin/
+obj/
+*.user
+*.userprefs
+*.sln.docstates
+
+# Visual Studio Code
+.vscode/
+*.code-workspace
+
+# ReSharper
+.idea/
+*.sln.iml
+
+# Database files
+*.db
+*.sqlite
+*.sqlite3
+
+# QR Code images
+QR_Kodlar/
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+
+# Node modules
+node_modules/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log

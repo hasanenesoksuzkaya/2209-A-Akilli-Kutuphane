@@ -1,0 +1,82 @@
+@{
+    ViewData["Title"] = "QR Kod Tara";
+}
+
+<!-- Hocam, bu sayfa QR kod tarama simülasyonu için -->
+<!-- Gerçek projede kamera ile QR okuma yapılacak ama prototipte manuel giriyoruz -->
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card shadow">
+            <div class="card-header bg-primary text-white text-center">
+                <h4 class="mb-0">
+                    <i class="fas fa-qrcode"></i> QR Kod Tara
+                </h4>
+            </div>
+            <div class="card-body">
+                
+                <!-- Hocam, hata mesajı varsa göster -->
+                @if (ViewBag.Hata != null)
+                {
+                    <div class="alert alert-danger">
+                        <i class="fas fa-exclamation-circle"></i> @ViewBag.Hata
+                    </div>
+                }
+
+                <!-- Hocam, QR kamera simülasyonu alanı -->
+                <div class="text-center mb-4">
+                    <div class="border rounded p-4 bg-light">
+                        <i class="fas fa-camera fa-5x text-secondary mb-3"></i>
+                        <p class="text-muted">
+                            Gerçek uygulamada burada kamera açılacak ve QR kod otomatik okunacak.
+                        </p>
+                        <p class="text-muted small">
+                            <strong>Prototip için:</strong> Aşağıya masa numarasını yazın.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Hocam, masa numarası giriş formu -->
+                <form method="post" asp-action="QRTara">
+                    <div class="mb-3">
+                        <label for="masaNo" class="form-label">
+                            <i class="fas fa-hashtag"></i> Masa Numarası
+                        </label>
+                        <input type="text" 
+                               class="form-control form-control-lg text-center" 
+                               id="masaNo" 
+                               name="masaNo" 
+                               placeholder="Örn: A-01"
+                               required
+                               style="text-transform: uppercase;">
+                        <div class="form-text">
+                            Masanın üzerindeki QR kodun altında yazan numarayı giriniz.
+                        </div>
+                    </div>
+
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary btn-lg">
+                            <i class="fas fa-search"></i> Masayı Bul
+                        </button>
+                    </div>
+                </form>
+
+                <hr>
+
+                <!-- Hocam, örnek masa numaraları gösteriyorum -->
+                <div class="text-center">
+                    <p class="text-muted mb-2">Mevcut masalar:</p>
+                    <span class="badge bg-secondary m-1">A-01</span>
+                    <span class="badge bg-secondary m-1">A-02</span>
+                    <span class="badge bg-secondary m-1">A-03</span>
+                    <span class="badge bg-secondary m-1">B-01</span>
+                    <span class="badge bg-secondary m-1">B-02</span>
+                    <span class="badge bg-secondary m-1">B-03</span>
+                    <span class="badge bg-secondary m-1">B-04</span>
+                    <span class="badge bg-secondary m-1">C-01</span>
+                    <span class="badge bg-secondary m-1">C-02</span>
+                    <span class="badge bg-secondary m-1">C-03</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

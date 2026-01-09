@@ -1,0 +1,152 @@
+@model Masa
+@{
+    ViewData["Title"] = "Rezervasyon - " + Model.MasaNo;
+}
+
+<!-- Hocam, öğrenci QR okuttuktan sonra bu sayfaya gelecek -->
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        
+        <!-- Hocam, TempData ile gelen mesajları göster -->
+        @if (TempData["Hata"] != null)
+        {
+            <div class="alert alert-danger alert-dismissible fade show">
+                <i class="fas fa-exclamation-circle"></i> @TempData["Hata"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        }
+        @if (TempData["Basari"] != null)
+        {
+            <div class="alert alert-success alert-dismissible fade show">
+                <i class="fas fa-check-circle"></i> @TempData["Basari"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        }
+
+        <div class="card shadow">
+            <div class="card-header @(Model.DoluMu ? "bg-danger" : "bg-success") text-white">
+                <h4 class="mb-0">
+                    <i class="fas fa-chair"></i> Masa @Model.MasaNo
+                    @if (Model.DoluMu)
+                    {
+                        <span class="badge bg-light text-danger float-end">DOLU</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-light text-success float-end">BOŞ</span>
+                    }
+                </h4>
+            </div>
+            <div class="card-body">
+                
+                <!-- Masa bilgileri -->
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <p><i class="fas fa-map-marker-alt text-primary"></i> <strong>Konum:</strong> @Model.Konum</p>
+                        <p><i class="fas fa-users text-primary"></i> <strong>Kapasite:</strong> @Model.Kapasite Kişilik</p>
+                    </div>
+                    <div class="col-md-6 text-center">
+                        @if (Model.DoluMu)
+                        {
+                            <i class="fas fa-user-clock fa-4x text-danger"></i>
+                        }
+                        else
+                        {
+                            <i class="fas fa-check-circle fa-4x text-success"></i>
+                        }
+                    </div>
+                </div>
+
+                @if (Model.DoluMu)
+                {
+                    <!-- Hocam, masa doluysa bilgi göster -->
+                    <div class="alert alert-warning">
+                        <h5><i class="fas fa-info-circle"></i> Bu masa şu an kullanımda!</h5>
+                        @if (ViewBag.AktifRezervasyon != null)
+                        {
+                            var rez = ViewBag.AktifRezervasyon as Rezervasyon;
+                            <p class="mb-1">
+                                <strong>Tahmini Boşalma:</strong> 
+                                @rez.TahminibitisZamani.ToString("HH:mm")
+                            </p>
+                            <p class="mb-0">
+                                <strong>Kalan Süre:</strong> 
+                                @{
+                                    var kalanDakika = (rez.TahminibitisZamani - DateTime.Now).TotalMinutes;
+                                    if (kalanDakika > 0)
+                                    {
+                                        var saat = (int)(kalanDakika / 60);
+                                        var dakika = (int)(kalanDakika % 60);
+                                        <span class="text-danger">@saat saat @dakika dakika</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-success">Süre dolmuş, yakında boşalabilir</span>
+                                    }
+                                }
+                            </p>
+                        }
+                    </div>
+                    <div class="d-grid">
+                        <a href="/Masa" class="btn btn-secondary">
+                            <i class="fas fa-arrow-left"></i> Başka Masa Seç
+                        </a>
+                    </div>
+                }
+                else
+                {
+                    <!-- Hocam, masa boşsa rezervasyon formu göster -->
+                    <hr>
+                    <h5><i class="fas fa-calendar-plus"></i> Rezervasyon Yap</h5>
+                    
+                    <form method="post" asp-action="RezervasyonYap">
+                        <input type="hidden" name="masaId" value="@Model.Id" />
+                        
+                        <div class="mb-3">
+                            <label for="ogrenciNo" class="form-label">
+                                <i class="fas fa-id-card"></i> Öğrenci Numaranız
+                            </label>
+                            <input type="text" 
+                                   class="form-control" 
+                                   id="ogrenciNo" 
+                                   name="ogrenciNo" 
+                                   placeholder="Örn: 2210101025"
+                                   required
+                                   maxlength="20">
+                            <div class="form-text">
+                                Öğrenci kartınızdaki numarayı giriniz.
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="sure" class="form-label">
+                                <i class="fas fa-clock"></i> Kaç Saat Oturacaksınız?
+                            </label>
+                            <select class="form-select" id="sure" name="sure" required>
+                                <option value="">-- Süre Seçin --</option>
+                                <option value="1">1 Saat</option>
+                                <option value="2">2 Saat</option>
+                                <option value="3">3 Saat</option>
+                                <option value="4">4 Saat</option>
+                                <option value="5">5 Saat</option>
+                                <option value="6">6 Saat</option>
+                            </select>
+                            <div class="form-text">
+                                Süre dolmadan çıkarsanız "Çıkış Yap" butonuna basmayı unutmayın!
+                            </div>
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-success btn-lg">
+                                <i class="fas fa-check"></i> Rezervasyon Yap
+                            </button>
+                            <a href="/Masa" class="btn btn-outline-secondary">
+                                <i class="fas fa-arrow-left"></i> Geri Dön
+                            </a>
+                        </div>
+                    </form>
+                }
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,112 @@
+@model List<Rezervasyon>
+@{
+    ViewData["Title"] = "Rezervasyonlarım";
+}
+
+<!-- Hocam, öğrenci kendi rezervasyonlarını bu sayfada görecek -->
+<div class="row">
+    <div class="col-12">
+        <h2><i class="fas fa-history"></i> Rezervasyonlarım</h2>
+        <p class="text-muted">Öğrenci numaranızı girerek rezervasyon geçmişinizi görüntüleyebilirsiniz.</p>
+    </div>
+</div>
+
+<!-- Hocam, öğrenci numarası sorgulama formu -->
+<div class="row mb-4">
+    <div class="col-md-6">
+        <form method="get" asp-action="Rezervasyonlarim" class="d-flex gap-2">
+            <input type="text" 
+                   class="form-control" 
+                   name="ogrenciNo" 
+                   placeholder="Öğrenci Numarası"
+                   value="@ViewBag.OgrenciNo">
+            <button type="submit" class="btn btn-primary">
+                <i class="fas fa-search"></i> Sorgula
+            </button>
+        </form>
+    </div>
+</div>
+
+@if (Model.Count > 0)
+{
+    <!-- Hocam, aktif rezervasyonu varsa üstte göster -->
+    var aktifRez = Model.FirstOrDefault(r => r.Durum == "Aktif");
+    @if (aktifRez != null)
+    {
+        <div class="alert alert-success">
+            <h5><i class="fas fa-check-circle"></i> Aktif Rezervasyonunuz</h5>
+            <p class="mb-1">
+                <strong>Masa:</strong> @aktifRez.Masa?.MasaNo (@aktifRez.Masa?.Konum)
+            </p>
+            <p class="mb-2">
+                <strong>Bitiş Saati:</strong> @aktifRez.TahminibitisZamani.ToString("HH:mm")
+            </p>
+            <a href="/Masa/RezervasyonDetay/@aktifRez.Id" class="btn btn-success btn-sm">
+                <i class="fas fa-eye"></i> Detay / Çıkış Yap
+            </a>
+        </div>
+    }
+
+    <!-- Hocam, tüm rezervasyonları tablo halinde göster -->
+    <div class="table-responsive">
+        <table class="table table-hover">
+            <thead class="table-dark">
+                <tr>
+                    <th>#</th>
+                    <th>Masa</th>
+                    <th>Başlangıç</th>
+                    <th>Bitiş</th>
+                    <th>Süre</th>
+                    <th>Durum</th>
+                    <th>İşlem</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var rez in Model)
+                {
+                    <tr class="@(rez.Durum == "Aktif" ? "table-success" : "")">
+                        <td>@rez.Id</td>
+                        <td>@rez.Masa?.MasaNo</td>
+                        <td>@rez.BaslangicZamani.ToString("dd.MM.yyyy HH:mm")</td>
+                        <td>
+                            @if (rez.GercekCikisZamani.HasValue)
+                            {
+                                @rez.GercekCikisZamani.Value.ToString("HH:mm")
+                            }
+                            else
+                            {
+                                <span class="text-muted">@rez.TahminibitisZamani.ToString("HH:mm") (tahmini)</span>
+                            }
+                        </td>
+                        <td>@rez.PlanlananSure saat</td>
+                        <td>
+                            @if (rez.Durum == "Aktif")
+                            {
+                                <span class="badge bg-success">Aktif</span>
+                            }
+                            else if (rez.Durum == "Tamamlandi")
+                            {
+                                <span class="badge bg-secondary">Tamamlandı</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-warning">@rez.Durum</span>
+                            }
+                        </td>
+                        <td>
+                            <a href="/Masa/RezervasyonDetay/@rez.Id" class="btn btn-sm btn-outline-primary">
+                                <i class="fas fa-eye"></i>
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+else if (!string.IsNullOrEmpty(ViewBag.OgrenciNo))
+{
+    <div class="alert alert-info">
+        <i class="fas fa-info-circle"></i> Bu öğrenci numarasına ait rezervasyon bulunamadı.
+    </div>
+}

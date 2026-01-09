@@ -1,0 +1,73 @@
+@{
+    ViewData["Title"] = "Hakkında";
+}
+
+<!-- Hocam, proje hakkında bilgi sayfası -->
+<div class="row">
+    <div class="col-lg-8 mx-auto">
+        <div class="card shadow">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0">
+                    <i class="fas fa-info-circle"></i> Proje Hakkında
+                </h4>
+            </div>
+            <div class="card-body">
+                <h5 class="card-title">
+                    Akıllı Kütüphane: QR Kod ve Öğrenci Kartı Entegrasyonuna Dayalı Masa Takip Sistemi
+                </h5>
+                
+                <div class="alert alert-info mt-3">
+                    <strong><i class="fas fa-award"></i> TÜBİTAK 2209-A</strong> - 
+                    Üniversite Öğrencileri Araştırma Projeleri Destekleme Programı
+                </div>
+
+                <h6 class="mt-4"><i class="fas fa-bullseye"></i> Projenin Amacı</h6>
+                <p>
+                    Üniversite kütüphanelerinde öğrencilerin boş masa arayarak zaman kaybetmesini 
+                    önlemek ve kütüphane kaynaklarının daha verimli kullanılmasını sağlamak.
+                </p>
+
+                <h6 class="mt-4"><i class="fas fa-cogs"></i> Nasıl Çalışıyor?</h6>
+                <ol>
+                    <li>Öğrenci kütüphaneye girer ve oturmak istediği masadaki QR kodu telefonuyla tarar.</li>
+                    <li>Sistem açılır ve öğrenci kaç saat oturacağını seçer (1-6 saat).</li>
+                    <li>Masa "DOLU" olarak işaretlenir ve diğer öğrenciler bunu görebilir.</li>
+                    <li>Öğrenci çıkarken "Çıkış Yap" butonuna basar.</li>
+                    <li>Masa tekrar "BOŞ" olarak güncellenir.</li>
+                </ol>
+
+                <h6 class="mt-4"><i class="fas fa-laptop-code"></i> Kullanılan Teknolojiler</h6>
+                <ul>
+                    <li><strong>Backend:</strong> C# - ASP.NET Core MVC</li>
+                    <li><strong>Veritabanı:</strong> SQLite</li>
+                    <li><strong>Frontend:</strong> HTML, CSS, JavaScript, Bootstrap 5</li>
+                    <li><strong>QR Kod:</strong> Python (qrcode kütüphanesi)</li>
+                </ul>
+
+                <hr>
+
+                <div class="row mt-4">
+                    <div class="col-md-6">
+                        <h6><i class="fas fa-user-graduate"></i> Proje Sahibi</h6>
+                        <p class="mb-1"><strong>Hasan Enes Öksüzkaya</strong></p>
+                        <p class="text-muted">
+                            Kayseri Üniversitesi<br>
+                            Bilgisayar Programcılığı - 2. Sınıf
+                        </p>
+                    </div>
+                    <div class="col-md-6">
+                        <h6><i class="fas fa-chalkboard-teacher"></i> Danışman</h6>
+                        <p class="mb-1"><strong>Öğr. Gör. Nurullah Öztürk</strong></p>
+                        <p class="text-muted">
+                            Kayseri Üniversitesi<br>
+                            Bilgisayar Teknolojileri Bölümü
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer text-muted text-center">
+                <small>© 2024-2026 Akıllı Kütüphane Projesi</small>
+            </div>
+        </div>
+    </div>
+</div>

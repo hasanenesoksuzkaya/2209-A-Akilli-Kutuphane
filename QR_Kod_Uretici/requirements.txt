@@ -1,0 +1,6 @@
+# QR Kod Üretici - Gereksinimler
+# Hocam, bu dosya Python kütüphanelerini yüklemek için
+# Kullanım: pip install -r requirements.txt
+
+qrcode==7.4.2
+Pillow==10.0.0
